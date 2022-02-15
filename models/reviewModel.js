@@ -8,5 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  reviewModel.associate = (models) => {
+    reviewModel.belongsTo(models.productModel, {
+      foreignKey: "product_id",
+      onDelete: "cascade",
+      as: "product",
+    });
+  };
+
   return reviewModel;
 };

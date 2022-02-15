@@ -16,6 +16,7 @@ const addProduct = async (req, res) => {
 
   const product = await Product.create(info);
   res.status(200).send(product);
+  console.log(product);
 };
 
 // 2. get all products
@@ -25,36 +26,81 @@ const getAllProducts = async (req, res) => {
   res.status(200).send(products);
 };
 
-// 3. get single products
+// 3. get single product
 
 const getOneProduct = async (req, res) => {
   let id = req.params.id;
-  let products = await Product.findOne({ where: { id: id } });
-  res.status(200).send(products);
-};
-
-// 4. update products -> postman 에서 method 를 put으로 두면 된다.
-
-const updateProduct = async (req, res) => {
-  let id = req.params.id;
-  const product = await Product.updateProducts(req.body, { where: { id: id } });
+  let product = await Product.findOne({ where: { id: id } });
   res.status(200).send(product);
 };
 
-// 5. delete products by id
+// 4. update Product
+
+const updateProduct = async (req, res) => {
+  let id = req.params.id;
+
+  const product = await Product.update(req.body, { where: { id: id } });
+
+  res.status(200).send(product);
+};
+
+// 5. delete product by id
 
 const deleteProduct = async (req, res) => {
   let id = req.params.id;
+
   await Product.destroy({ where: { id: id } });
-  res.status(200).send("product is deleted");
+
+  res.status(200).send("Product is deleted !");
 };
 
 // 6. get published product
 
 const getPublishedProduct = async (req, res) => {
   const products = await Product.findAll({ where: { published: true } });
+
   res.status(200).send(products);
 };
+
+// 7. connect one to many relation Product and Reviews
+
+const getProductReviews = async (req, res) => {
+  //const id = req.params.id;
+
+  const data = await Product.findAll({
+    where: { id: 1 },
+  });
+
+  res.status(200).send(data);
+};
+
+/*
+// 8. Upload Image Controller
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'Images')
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: '1000000' },
+  fileFilter: (req, file, cb) => {
+      const fileTypes = /jpeg|jpg|png|gif/
+      const mimeType = fileTypes.test(file.mimetype)  
+      const extname = fileTypes.test(path.extname(file.originalname))
+
+      if(mimeType && extname) {
+          return cb(null, true)
+      }
+      cb('Give proper files formate to upload')
+  }
+}).single('image')
+*/
 
 module.exports = {
   addProduct,
@@ -63,4 +109,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getPublishedProduct,
+  getProductReviews,
+  // upload
 };

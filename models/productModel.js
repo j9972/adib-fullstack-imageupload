@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  productModel.associate = (models) => {
+    productModel.hasMany(models.reviewModel, {
+      foreignKey: "product_id",
+      onDelete: "cascade",
+      as: "review",
+    });
+  };
+
   return productModel;
 };
 

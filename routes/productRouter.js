@@ -1,18 +1,34 @@
+// import controllers review, products
 const productController = require("../controllers/productController.js");
+const reviewController = require("../controllers/reviewController");
 
-const express = require("express");
-const router = express.Router();
+// router
+const router = require("express").Router();
 
-router.post("/addProduct", productController.addProduct);
+// use routers
+router.post(
+  "/addProduct",
+  // productController.upload,
+  productController.addProduct
+);
 
-router.get("/getAllProducts", productController.getAllProducts);
+router.get("/allProducts", productController.getAllProducts);
 
 router.get("/published", productController.getPublishedProduct);
 
+// Review Url and Controller
+
+router.get("/allReviews", reviewController.getAllReviews);
+router.post("/addReview", reviewController.addReview);
+
+// get product Reviews
+router.get("/getProductReviews", productController.getProductReviews);
+
+// Products router
 router.get("/:id", productController.getOneProduct);
 
-router.get("/:id", productController.updateProduct);
+router.put("/:id", productController.updateProduct);
 
-router.get("/:id", productController.deleteProduct);
+router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;
